@@ -1,10 +1,12 @@
 package com.eventmanager.eventassistantbot.bot;
 
+import com.eventmanager.eventassistantbot.bot.bot_utils.UserHandler;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 
 @Component
@@ -26,8 +28,15 @@ public class EventAssistantBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         SendMessage message = new SendMessage();
         message.setChatId(update.getMessage().getChatId().toString());
-        String text = "Hi "+ update.getMessage().getFrom().getFirstName();
+        User user = update.getMessage().getFrom();
+        String text=null ;
+        if(UserHandler.newUser(user.getId())==true)
+            text=welcomeMessage(user.getFirstName());
         message.setText(text);
         execute(message);
+    }
+
+    private String welcomeMessage(String firstName) {
+        return "Hi "+ firstName+"\nwelcome to the group\n";
     }
 }
