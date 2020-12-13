@@ -1,18 +1,26 @@
 package com.eventmanager.eventassistantbot.bot;
 
-import com.eventmanager.eventassistantbot.bot.bot_utils.UserHandler;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.bots.TelegramWebhookBot;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
 
 
 @Component
-public class EventAssistantBot extends TelegramLongPollingBot {
-    private final String BOT_USER_NAME = "EventAssistantBot";
-    private final String TOKEN = "1400174521:AAHbEIdyYn1VMc4MJiZpnDKd_c87XecrKrI";
+public class EventAssistantBot extends TelegramWebhookBot {
+    private final String BOT_USER_NAME = "@EventAssistantBot";
+    private final String BOT_TOKEN = "1400174521:AAHbEIdyYn1VMc4MJiZpnDKd_c87XecrKrI";
+    private final String BOT_PATH = "https://085e9cfb2eee.ap.ngrok.io";
+
+    @Autowired
+    private TelegramFacade telegramFacade;
+
+
+
+
     @Override
     public String getBotUsername() {
         return BOT_USER_NAME;
@@ -20,23 +28,44 @@ public class EventAssistantBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return TOKEN;
+        return BOT_TOKEN;
     }
+
+//    @SneakyThrows
+//    @Override
+//    public void onUpdateReceived(Update update) {
+//        SendMessage message=new SendMessage();
+//        message=telegramFacade.updateHandler(update);
+//        if(message.getChatId()!=null&& message.getText()!=null) execute(message);
+//
+//    }
 
     @SneakyThrows
     @Override
-    public void onUpdateReceived(Update update) {
-        SendMessage message = new SendMessage();
-        message.setChatId(update.getMessage().getChatId().toString());
-        User user = update.getMessage().getFrom();
-        String text=null ;
-        if(UserHandler.newUser(user.getId())==true)
-            text=welcomeMessage(user.getFirstName());
-        message.setText(text);
-        execute(message);
+    public BotApiMethod onWebhookUpdateReceived(Update update) {
+        SendMessage message=new SendMessage();
+        message=telegramFacade.updateHandler(update);
+        if(message.getChatId()!=null&& message.getText()!=null) execute(message);
+        return null;
     }
 
-    private String welcomeMessage(String firstName) {
-        return "Hi "+ firstName+"\nwelcome to the group\n";
+    @Override
+    public String getBotPath() {
+        return BOT_PATH;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
