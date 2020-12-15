@@ -2,18 +2,21 @@ package com.eventmanager.eventassistantbot.bot;
 
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 
 @Component
 public class EventAssistantBot extends TelegramWebhookBot {
-    private final String BOT_USER_NAME = "@EventAssistantBot";
-    private final String BOT_TOKEN = "1400174521:AAHbEIdyYn1VMc4MJiZpnDKd_c87XecrKrI";
-    private final String BOT_PATH = "https://085e9cfb2eee.ap.ngrok.io";
+    @Value("$telegram.BOT_USER_NAME")
+    private String BOT_USER_NAME;
+    @Value("$telegram.BOT_TOKEN")
+    private  String BOT_TOKEN ;
+    @Value("$telegram.external-url")
+    private String BOT_PATH;
 
     @Autowired
     private TelegramFacade telegramFacade;
@@ -31,22 +34,10 @@ public class EventAssistantBot extends TelegramWebhookBot {
         return BOT_TOKEN;
     }
 
-//    @SneakyThrows
-//    @Override
-//    public void onUpdateReceived(Update update) {
-//        SendMessage message=new SendMessage();
-//        message=telegramFacade.updateHandler(update);
-//        if(message.getChatId()!=null&& message.getText()!=null) execute(message);
-//
-//    }
-
     @SneakyThrows
     @Override
     public BotApiMethod onWebhookUpdateReceived(Update update) {
-        SendMessage message=new SendMessage();
-        message=telegramFacade.updateHandler(update);
-        if(message.getChatId()!=null&& message.getText()!=null) execute(message);
-        return null;
+        return telegramFacade.updateHandler(update);
     }
 
     @Override

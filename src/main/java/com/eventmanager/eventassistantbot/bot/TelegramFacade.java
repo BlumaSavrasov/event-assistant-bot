@@ -23,7 +23,7 @@ public class TelegramFacade {
 
 
     public SendMessage updateHandler(Update update) {
-        SendMessage message = new SendMessage();
+        SendMessage message= new SendMessage();
         if (update.hasMessage() && update.getMessage().hasText()) {
             Long chatId = update.getMessage().getChat().getId();
             if (update.getMessage().getText().equals("/start")) {
@@ -35,34 +35,13 @@ public class TelegramFacade {
                 chatData.registerChat(chatId,GROUP_CHAT);
             }
             if(chatData.contains(chatId)&&chatData.get(chatId).isGroup())
-                message = groupHandler.handleMessage(update, chatData);
+                return groupHandler.handleMessage(update, chatData);
             else
-                message = adminHandler.handleMessage(update);
+                return adminHandler.handleMessage(update);
         }
         else if (update.hasCallbackQuery()){
-            message=handleButtons(update);
+            return groupHandler.handleButtons(update,message,chatData);
         }
-     return message;
-    }
-
-
-
-    private SendMessage handleButtons(Update update) {
-        SendMessage message = new SendMessage();
-        String callData = update.getCallbackQuery().getData();
-        long chatId = update.getCallbackQuery().getMessage().getChatId();
-
-        if (callData.equals("ask_question")) {
-            chatData.replace(chatId,WAITING_FOR_QUESTION);
-            return askQuestionButtonHandler(chatId);
-        }
-        return message;
-    }
-
-    private SendMessage askQuestionButtonHandler(long chatId) {
-        SendMessage message = new SendMessage();
-        message.setChatId(Long.toString(chatId));
-        message.setText("What would you like to ask?");
-        return message;
+     return new SendMessage();
     }
 }

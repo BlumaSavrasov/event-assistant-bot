@@ -1,6 +1,10 @@
 package com.eventmanager.eventassistantbot.bot.bot_utils;
 
+import com.eventmanager.eventassistantbot.services.EventService;
+import com.eventmanager.eventassistantbot.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,15 +15,23 @@ import java.util.Map;
 public class UsersHandler{
    private Map<Integer,List<Long>> usersCache = new HashMap<>();
 
-    public boolean newUser(int id,Long chatId){
-        if(!usersCache.containsKey(id)) {
+   @Autowired
+   private UserService userService;
+   @Autowired
+   private EventService eventService;
+
+    public boolean newUser(User user, Long chatId){
+        if(!usersCache.containsKey(user.getId())&&userService.get(user.getId())==null) {
             List<Long> chatList = new ArrayList<>();
             chatList.add(chatId);
-            usersCache.put(id,chatList);
+//            userService.create(user);
+            //*********************************************************************
+            eventService.addGuestToEvent(user,2L);
+            usersCache.put(user.getId(),chatList);
             return true;
         }
-        else if(!usersCache.get(id).contains(chatId)){
-            usersCache.get(id).add(chatId);
+        else if(!usersCache.get(user.getId()).contains(chatId)){
+            usersCache.get(user.getId()).add(chatId);
             return true;
         }
         return false;

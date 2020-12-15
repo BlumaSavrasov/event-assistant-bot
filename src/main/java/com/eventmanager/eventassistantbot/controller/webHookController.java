@@ -15,7 +15,6 @@ import com.eventmanager.eventassistantbot.bot.EventAssistantBot;
 public class webHookController {
     @Autowired
     private EventAssistantBot eventAssistantBot;
-
     @RequestMapping(value="/",method= RequestMethod.POST)
     public BotApiMethod<?> onUpdateReceived(@RequestBody Update update){
         return eventAssistantBot.onWebhookUpdateReceived(update);

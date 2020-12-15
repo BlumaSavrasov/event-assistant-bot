@@ -11,11 +11,10 @@ import java.util.Map;
 @Component
 @Getter
 public class ChatData {
-
+//add eventId
     private Map<Long, ChatStatus> chatMap =new HashMap<>();
     public boolean newChat(Long id) {
-        if(chatMap.containsKey(id)) return false;
-        return true;
+        return !chatMap.containsKey(id);
     }
 
     public void registerChat(Long id, ChatStatus chatStatus) {

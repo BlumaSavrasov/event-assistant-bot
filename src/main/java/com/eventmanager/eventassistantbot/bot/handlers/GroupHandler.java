@@ -18,7 +18,7 @@ import java.util.List;
 public class GroupHandler {
     @Autowired
     private UsersHandler usersHandler;
-
+    @Autowired
     private List<GroupButtonHandler> buttons;
     @Autowired
     private QuestionHandler questionHandler;
@@ -28,7 +28,7 @@ public class GroupHandler {
         Long chatId = update.getMessage().getChatId();
         message.setChatId(chatId.toString());
         User user = update.getMessage().getFrom();
-        if(usersHandler.newUser(user.getId(), chatId)){
+        if(usersHandler.newUser(user, chatId)){
             message.setText(welcomeMessage(user.getFirstName()));
             InlineKeyboardMarkup markupInline = getMenu();
             message.setReplyMarkup(markupInline);
@@ -39,23 +39,27 @@ public class GroupHandler {
         return message;
     }
 
+
     private InlineKeyboardMarkup getMenu() {
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();
-        InlineKeyboardButton button = new InlineKeyboardButton();
-        button.setText("Ask a question");
-        button.setCallbackData("ask_question");
-        rowInline.add(button);
-        // Set the keyboard to the markup
+        buttons.stream()
+                .map(GroupButtonHandler::getButton)
+                .forEach(rowInline::add);
         rowsInline.add(rowInline);
-        // Add it to the message
         markupInline.setKeyboard(rowsInline);
         return markupInline;
     }
 
     private String welcomeMessage(String firstName) {
         return "Hi "+ firstName+"\nwelcome to the group\n";
+
+    }
+
+    public SendMessage handleButtons(Update update,SendMessage message,ChatData chatData) {
+        buttons.forEach(button->button.handle(update,message,chatData));
+        return message;
 
     }
 }
