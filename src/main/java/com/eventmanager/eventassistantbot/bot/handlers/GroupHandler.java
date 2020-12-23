@@ -28,11 +28,14 @@ public class GroupHandler {
         Long chatId = update.getMessage().getChatId();
         message.setChatId(chatId.toString());
         User user = update.getMessage().getFrom();
-        if(usersHandler.newUser(user, chatId)){
+        if(usersHandler.newUser(update,chatId)){
             message.setText(welcomeMessage(user.getFirstName()));
             InlineKeyboardMarkup markupInline = getMenu();
             message.setReplyMarkup(markupInline);
-        }else if(chatData.get(chatId) == ChatStatus.WAITING_FOR_QUESTION){
+        }else if(update.getMessage().getLeftChatMember()!=null){
+
+        }
+        else if(chatData.get(chatId) == ChatStatus.WAITING_FOR_QUESTION){
             chatData.replace(chatId,ChatStatus.GROUP_CHAT);
             message=questionHandler.handleQuestion(update);
         }

@@ -32,11 +32,11 @@ public class QuestionHandler {
 
     private void sendQuestionToAdmin(Update update) {
         //todo
-        SendMessage message=new SendMessage();
-        message.setChatId(adminMap.get(update.getMessage().getChatId()).toString());
-        String firstName = update.getMessage().getFrom().getFirstName();
-        String question = update.getMessage().getText();
-        message.setText(firstName + " is asking " + question);
+//        SendMessage message=new SendMessage();
+//        message.setChatId(adminMap.get(update.getMessage().getChatId()).toString());
+//        String firstName = update.getMessage().getFrom().getFirstName();
+//        String question = update.getMessage().getText();
+//        message.setText(firstName + " is asking " + question);
 //        need to send it to admin
     }
 

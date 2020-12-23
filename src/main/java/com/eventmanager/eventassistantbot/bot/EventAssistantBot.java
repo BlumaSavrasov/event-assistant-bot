@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 
+
 @Component
 public class EventAssistantBot extends TelegramWebhookBot {
     @Value("$telegram.BOT_USER_NAME")
@@ -37,6 +38,7 @@ public class EventAssistantBot extends TelegramWebhookBot {
     @SneakyThrows
     @Override
     public BotApiMethod onWebhookUpdateReceived(Update update) {
+        System.out.println(update);
         return telegramFacade.updateHandler(update);
     }
 
