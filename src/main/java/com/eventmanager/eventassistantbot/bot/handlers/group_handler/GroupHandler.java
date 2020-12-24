@@ -1,4 +1,4 @@
-package com.eventmanager.eventassistantbot.bot.handlers;
+package com.eventmanager.eventassistantbot.bot.handlers.group_handler;
 
 import com.eventmanager.eventassistantbot.bot.ChatStatus;
 import com.eventmanager.eventassistantbot.bot.bot_utils.ChatData;
@@ -6,9 +6,12 @@ import com.eventmanager.eventassistantbot.bot.bot_utils.UsersHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
@@ -28,22 +31,33 @@ public class GroupHandler {
         Long chatId = update.getMessage().getChatId();
         message.setChatId(chatId.toString());
         User user = update.getMessage().getFrom();
-        if(usersHandler.newUser(update,chatId)){
+        if(!update.getMessage().getNewChatMembers().isEmpty()){
+            usersHandler.registerNewUserToInvitedList(user,chatId);
             message.setText(welcomeMessage(user.getFirstName()));
             InlineKeyboardMarkup markupInline = getMenu();
             message.setReplyMarkup(markupInline);
-        }else if(update.getMessage().getLeftChatMember()!=null){
-
-        }
+        }//else if(update.getMessage().getLeftChatMember()!=null) usersHandler.removeUser(user, chatId);
         else if(chatData.get(chatId) == ChatStatus.WAITING_FOR_QUESTION){
             chatData.replace(chatId,ChatStatus.GROUP_CHAT);
             message=questionHandler.handleQuestion(update);
+        }
+        else if(chatData.get(chatId) == ChatStatus.WAITING_FOR_CONFIRMATION){
+            chatData.replace(chatId,ChatStatus.GROUP_CHAT);
+            if(update.getMessage().getText().equals("Yes!!")){
+                usersHandler.registerNewUserToApprovedGuestList(user,chatId);
+                message.setReplyMarkup(new ReplyKeyboardRemove());
+                message.setText("We are so happy you are coming!");
+            }
+            else if(update.getMessage().getText().equals("Sorry but no:/")){
+                message.setReplyMarkup(new ReplyKeyboardRemove());
+                message.setText("Ohhh this is so sad. we'll miss you!");
+            }
         }
         return message;
     }
 
 
-    private InlineKeyboardMarkup getMenu() {
+    private InlineKeyboardMarkup getMenu(){
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         List<InlineKeyboardButton> rowInline = new ArrayList<>();

@@ -39,7 +39,15 @@ public class EventService {
 ////        httpHeaders.set(HEADER,tokenHolderService.getToken());
 //        String userJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(user);
 //        restTemplate.exchange(eventServiceUrl+"/events"+BY_GUEST+"/"+eventId, HttpMethod.POST,new HttpEntity<>(userJson,httpHeaders),User[].class);
-        User[] users = restTemplate.postForObject(eventServiceUrl + "/events" + BY_GUEST + "/" + eventId, user, User[].class);
+        User[] users = restTemplate.postForObject(eventServiceUrl + "/events/invited/" + eventId, user, User[].class);
 
+    }
+
+    public void removeGuestFromEvent(UserDto userDto, Long eventId) {
+        //todo
+    }
+
+    public void addApprovedGuestToEvent(UserDto user, Long eventId) {
+        User[] users = restTemplate.postForObject(eventServiceUrl + "/events/guest/" + eventId, user, User[].class);
     }
 }

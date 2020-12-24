@@ -1,9 +1,10 @@
-package com.eventmanager.eventassistantbot.bot.handlers;
+package com.eventmanager.eventassistantbot.bot.handlers.group_handler;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import java.util.Map;
 @Component
 public class QuestionHandler {
     private Map<Long,Long> adminMap=new HashMap<>();
+     private Map<String,String> question2answer =new HashMap<>();
 
 
     public SendMessage handleQuestion(Update update) {
@@ -26,7 +28,6 @@ public class QuestionHandler {
     }
 
     private String existingAnswers(String question) {
-        //todo
         return "existing answer";
     }
 
@@ -41,7 +42,6 @@ public class QuestionHandler {
     }
 
     private boolean newQuestion(String question) {
-        //todo
         return true;
     }
 }

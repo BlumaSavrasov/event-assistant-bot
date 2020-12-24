@@ -3,7 +3,7 @@ package com.eventmanager.eventassistantbot.bot;
 
 import com.eventmanager.eventassistantbot.bot.bot_utils.ChatData;
 import com.eventmanager.eventassistantbot.bot.handlers.AdminHandler;
-import com.eventmanager.eventassistantbot.bot.handlers.GroupHandler;
+import com.eventmanager.eventassistantbot.bot.handlers.group_handler.GroupHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

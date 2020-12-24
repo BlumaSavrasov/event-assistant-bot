@@ -15,28 +15,23 @@ import java.util.Map;
 
 @Component
 public class UsersHandler{
-   private Map<Integer,List<Long>> usersCache = new HashMap<>();
+//   private Map<Integer,List<Long>> usersCache = new HashMap<>();
 
 //   @Autowired
 //   private UserService userService;
    @Autowired
    private EventService eventService;
 
-    public boolean newUser(Update update, Long chatId){
-        User user = update.getMessage().getFrom();
-        if(update.getMessage().getNewChatMembers()!=null) {
-            List<Long> chatList = new ArrayList<>();
-            chatList.add(chatId);
-//            userService.create(user);
-            //*********************************************************************
-            eventService.addGuestToEvent(new UserDto(user.getId(),user.getFirstName()),2L);
-            usersCache.put(user.getId(),chatList);
-            return true;
-        }
-        else if(!usersCache.get(user.getId()).contains(chatId)){
-            usersCache.get(user.getId()).add(chatId);
-            return true;
-        }
-        return false;
+    public void registerNewUserToInvitedList(User user, Long chatId){
+        eventService.addGuestToEvent(new UserDto(user.getId(),user.getFirstName()),2L);
+    }
+
+    public void removeUser(User user, Long chatId) {
+        eventService.removeGuestFromEvent(new UserDto(user.getId(),user.getFirstName()),2L);
+    }
+
+    public void registerNewUserToApprovedGuestList(User user, Long chatId) {
+        eventService.addApprovedGuestToEvent(new UserDto(user.getId(),user.getFirstName()),2L);
+
     }
 }
