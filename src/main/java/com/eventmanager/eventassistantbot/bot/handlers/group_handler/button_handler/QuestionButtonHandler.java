@@ -1,7 +1,7 @@
-package com.eventmanager.eventassistantbot.bot.handlers.group_handler;
+package com.eventmanager.eventassistantbot.bot.handlers.group_handler.button_handler;
 
 import com.eventmanager.eventassistantbot.bot.bot_utils.ChatData;
-import com.eventmanager.eventassistantbot.bot.handlers.group_handler.GroupButtonHandler;
+import com.eventmanager.eventassistantbot.bot.handlers.group_handler.button_handler.GroupButtonHandler;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;

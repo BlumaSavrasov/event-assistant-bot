@@ -1,4 +1,4 @@
-package com.eventmanager.eventassistantbot.bot.handlers.group_handler;
+package com.eventmanager.eventassistantbot.bot.handlers.group_handler.button_handler;
 
 
 import com.eventmanager.eventassistantbot.bot.bot_utils.ChatData;

@@ -1,4 +1,4 @@
-package com.eventmanager.eventassistantbot.bot.handlers.group_handler;
+package com.eventmanager.eventassistantbot.bot.handlers.group_handler.button_handler;
 
 import com.eventmanager.eventassistantbot.bot.bot_utils.ChatData;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.eventmanager.eventassistantbot.bot.ChatStatus.WAITING_FOR_CONFIRMATION;
-import static com.eventmanager.eventassistantbot.bot.ChatStatus.WAITING_FOR_QUESTION;
 
 @Component
 public class ArrivalConfirmationButtonHandler implements GroupButtonHandler {

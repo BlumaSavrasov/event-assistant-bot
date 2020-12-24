@@ -15,16 +15,13 @@ public class QuestionHandler {
      private Map<String,String> question2answer =new HashMap<>();
 
 
-    public SendMessage handleQuestion(Update update) {
-        SendMessage message=new SendMessage();
-        message.setChatId(update.getMessage().getChatId().toString());
+    public String handleQuestion(Update update) {
         String question = update.getMessage().getText();
         if(newQuestion(question)){
             sendQuestionToAdmin(update);
-            message.setText("Question sent to admin");
+            return "Question sent to admin";
         }
-        else message.setText(existingAnswers(question));
-        return message;
+        else return existingAnswers(question);
     }
 
     private String existingAnswers(String question) {
