@@ -2,10 +2,12 @@ package com.eventmanager.eventassistantbot.bot;
 
 
 import com.eventmanager.eventassistantbot.bot.bot_utils.ChatData;
-import com.eventmanager.eventassistantbot.bot.handlers.AdminHandler;
+import com.eventmanager.eventassistantbot.bot.handlers.admin_handlers.AdminHandler;
 import com.eventmanager.eventassistantbot.bot.handlers.group_handler.GroupHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.SetChatTitle;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -22,25 +24,21 @@ public class TelegramFacade {
 
 
 
-    public SendMessage updateHandler(Update update) {
+    public BotApiMethod updateHandler(Update update) {
         SendMessage message= new SendMessage();
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            Long chatId = update.getMessage().getChat().getId();
-            if (update.getMessage().getText().equals("/start")) {
-                if (!update.getMessage().getChat().isGroupChat()) {
-                    chatData.registerChat(chatId,ADMIN_CHAT);
-                }
+        if (update.hasMessage()) {
+            if (!update.getMessage().getChat().isGroupChat()) {
+                adminHandler.handleMessage(update,chatData);
             }
-            else if(update.getMessage().getChat().isGroupChat()&&chatData.newChat(chatId)){
-                chatData.registerChat(chatId,GROUP_CHAT);
-            }
-            if(chatData.contains(chatId)&&chatData.get(chatId).isGroup())
+            else if (update.getMessage().getChat().isGroupChat() ) {
                 return groupHandler.handleMessage(update, chatData);
-            else
-                return adminHandler.handleMessage(update);
+            }
+
         }
         else if (update.hasCallbackQuery()){
-            return groupHandler.handleButtons(update,message,chatData);
+            if(update.getCallbackQuery().getMessage().getChat().isGroupChat()) {
+                return groupHandler.handleButtons(update, message, chatData);
+            }
         }
      return new SendMessage();
     }

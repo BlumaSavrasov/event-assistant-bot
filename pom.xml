@@ -48,6 +48,12 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.telegram/telegramapi -->
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegramapi</artifactId>
+            <version>66.2</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

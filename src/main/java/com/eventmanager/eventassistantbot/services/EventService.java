@@ -44,7 +44,7 @@ public class EventService {
     }
 
     public void removeGuestFromEvent(UserDto userDto, Long eventId) {
-        //todo
+        restTemplate.delete(eventServiceUrl+"/events/guest?eventId="+eventId+"&guestId="+userDto.getId());
     }
 
     public void addApprovedGuestToEvent(UserDto user, Long eventId) {

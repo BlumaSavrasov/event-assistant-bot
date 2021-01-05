@@ -13,6 +13,7 @@ import java.util.Map;
 public class ChatData {
 //add eventId
     private Map<Long, ChatStatus> chatMap =new HashMap<>();
+
     public boolean newChat(Long id) {
         return !chatMap.containsKey(id);
     }

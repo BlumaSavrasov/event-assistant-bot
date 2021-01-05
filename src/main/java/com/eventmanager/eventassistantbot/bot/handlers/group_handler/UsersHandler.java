@@ -1,4 +1,4 @@
-package com.eventmanager.eventassistantbot.bot.bot_utils;
+package com.eventmanager.eventassistantbot.bot.handlers.group_handler;
 
 import com.eventmanager.eventassistantbot.dto.UserDto;
 import com.eventmanager.eventassistantbot.services.EventService;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Component
 public class UsersHandler{
-//   private Map<Integer,List<Long>> usersCache = new HashMap<>();
+   private Map<Integer,List<Long>> usersCache = new HashMap<>();
 
 //   @Autowired
 //   private UserService userService;
@@ -31,6 +31,7 @@ public class UsersHandler{
     }
 
     public void registerNewUserToApprovedGuestList(User user, Long chatId) {
+
         eventService.addApprovedGuestToEvent(new UserDto(user.getId(),user.getFirstName()),2L);
 
     }
